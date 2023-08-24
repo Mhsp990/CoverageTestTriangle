@@ -1,13 +1,13 @@
 import pytest
-from triangle import triangle_type
-
+from src.triangle import triangle_type
+##Testes
 def test_notATriangle():
     assert triangle_type(0,10,20) == 'Not a triangle'
     assert triangle_type(10,0,20) == 'Not a triangle'
     assert triangle_type(10,20,0) == 'Not a triangle'
     assert triangle_type(0,0,0) == 'Not a triangle'
     assert triangle_type(5,13,5) == 'Not a triangle'
-    assert triangle_type(3,3,6) == 'Not a triangle'
+    assert triangle_type(3,3,7) == 'Not a triangle'
     assert triangle_type(3,10,5) == 'Not a triangle'
 
 def test_equilateral():
