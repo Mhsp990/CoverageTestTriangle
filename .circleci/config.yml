@@ -9,28 +9,52 @@ jobs:
       - checkout
       - run:
           name: Install Dependencies
-          command: pip install pytest
+          command: |
+            pip install pytest
+            pip install pytest-cov
       - run:
-          name: Run Tests
-          command: pytest tests/
-  
-  build:
+          name: Run Tests with Coverage
+          command: pytest --cov=src tests/
+      - store_artifacts:
+          path: htmlcov
+
+  job_a:
     docker:
       - image: python:3.8
     working_directory: ~/project
     steps:
       - checkout
       - run:
-          name: Build Production Code
+          name: Run Job A
           command: |
-            # Insira aqui outros comandos que são necessários para executar a app, caso seja desejado.
-            # No caso de linguagens que necessitam compilar, como C, seria interessante compilar e rodar neste job.
-  
+            # Coloque os comandos do Job A aqui
+
+  job_b:
+    docker:
+      - image: python:3.8
+    working_directory: ~/project
+    steps:
+      - checkout
+      - run:
+          name: Check Coverage and Run Job B
+          command: |
+            COVERAGE=$(python calculate_coverage.py)  # Substitua pelo comando real de cálculo da cobertura
+            if [ "$COVERAGE" -gt 80 ]; then
+                echo "Coverage is greater than 80%. Running Job B."
+                # Comandos para executar o Job B
+            else
+                echo "Coverage is not sufficient for Job B."
+            fi
+
 workflows:
   version: 2
   build-and-test:
     jobs:
       - test
-      - build:
+      - job_a:
           requires:
             - test
+      - job_b:
+          requires:
+            - test
+            - job_a
