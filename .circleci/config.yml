@@ -23,9 +23,8 @@ jobs:
       - run:
           name: Build Production Code
           command: |
-            # Add build steps for your production code here
-            # For example:
-            # python src/build.py
+            # Insira aqui outros comandos que são necessários para executar a app, caso seja desejado.
+            # No caso de linguagens que necessitam compilar, como C, seria interessante compilar e rodar neste job.
   
 workflows:
   version: 2
