@@ -14,47 +14,12 @@ jobs:
             pip install pytest-cov
       - run:
           name: Run Tests with Coverage
-          command: pytest --cov=src tests/
+          command: pytest --cov=src --cov-report=html tests/
       - store_artifacts:
           path: htmlcov
-
-  job_a:
-    docker:
-      - image: python:3.8
-    working_directory: ~/project
-    steps:
-      - checkout
-      - run:
-          name: Run Job A
-          command: |
-            # Coloque os comandos do Job A aqui
-
-  job_b:
-    docker:
-      - image: python:3.8
-    working_directory: ~/project
-    steps:
-      - checkout
-      - run:
-          name: Check Coverage and Run Job B
-          command: |
-            COVERAGE=$(python calculate_coverage.py)  # Substitua pelo comando real de cálculo da cobertura
-            if [ "$COVERAGE" -gt 80 ]; then
-                echo "Coverage is greater than 80%. Running Job B."
-                # Comandos para executar o Job B
-            else
-                echo "Coverage is not sufficient for Job B."
-            fi
 
 workflows:
   version: 2
   build-and-test:
     jobs:
       - test
-      - job_a:
-          requires:
-            - test
-      - job_b:
-          requires:
-            - test
-            - job_a
